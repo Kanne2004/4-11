@@ -7,6 +7,7 @@ public class ProjectTile : MonoBehaviour
     [SerializeField] private float speed;
     private float direction;
     private bool hit;
+    private float lifetime;
 
     private BoxCollider2D boxCollider;
     private Animator anim;
@@ -19,8 +20,11 @@ public class ProjectTile : MonoBehaviour
     void Update()
     {
         if (hit) return;
-        float danBay = speed * Time.deltaTime * direction;
-        transform.Translate(danBay, 0, 0);
+        float movementSpeed = speed * Time.deltaTime * direction;
+        transform.Translate(movementSpeed, 0, 0);
+
+        lifetime += Time.deltaTime;
+        if (lifetime > 5) gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -31,6 +35,7 @@ public class ProjectTile : MonoBehaviour
     }
     public void SetDirection(float _direction)
     {
+        lifetime = 0;
         direction = _direction;
         gameObject.SetActive(true);
         hit = false;
@@ -42,7 +47,7 @@ public class ProjectTile : MonoBehaviour
 
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
     }
-    private void Deactive()
+    private void Deactivate()
     {
         gameObject.SetActive(false);
     }

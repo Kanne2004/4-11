@@ -14,12 +14,12 @@ public class P1attack : MonoBehaviour
     // Update is called once per frame
     private void Awake()
     {
-        move = GetComponent<Move>();
         anim = GetComponent<Animator>();
+        move = GetComponent<Move>();
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.J) && cooldownTimer > attackCD && move.canAttack())
+        if (Input.GetKeyDown(KeyCode.K) && cooldownTimer > attackCD && move.canAttack())
         {
             Attack();
         }
@@ -31,7 +31,16 @@ public class P1attack : MonoBehaviour
         anim.SetTrigger("attack");
         cooldownTimer = 0;
 
-        fireballs[0].transform.position = firePoint.position;
-        fireballs[0].GetComponent<ProjectTile>().SetDirection(Mathf.Sign(transform.localScale.x));
+        fireballs[FindFireball()].transform.position = firePoint.position;
+        fireballs[FindFireball()].GetComponent<ProjectTile>().SetDirection(Mathf.Sign(transform.localScale.x));
+    }
+    private int FindFireball()
+    {
+        for (int i = 0; i < fireballs.Length; i++)
+        {
+            if (!fireballs[i].activeInHierarchy)
+                return i;
+        }
+        return 0;
     }
 }
